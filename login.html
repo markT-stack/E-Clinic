@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CTU E-Clinic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="tab-buttons">
+        <button id="loginTab" class="active">Login</button>
+        <button id="signupTab">Sign Up</button>
+      </div>
+
+      <form class="login-form" id="loginForm">
+        <h2>CTU E-Clinic Login</h2>
+
+        <div class="input-group">
+          <label>Username</label>
+          <input type="text" id="loginUsername" required />
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" required />
+        </div>
+
+        <button type="submit">Login</button>
+        <p id="loginErrorMsg"></p>
+      </form>
+
+      <!-- Sign Up Form -->
+      <form class="signup-form" id="signupForm" style="display: none">
+        <h2>CTU E-Clinic Sign Up</h2>
+
+        <div class="input-group">
+          <label>Username</label>
+          <input type="text" id="signupUsername" required />
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="signupPassword" required />
+        </div>
+
+        <div class="input-group">
+          <label>Confirm Password</label>
+          <input type="password" id="signupConfirmPassword" required />
+        </div>
+
+        <button type="submit">Sign Up</button>
+        <p id="signupErrorMsg"></p>
+      </form>
+    </div>
+
+    <script>
+      const loginTab = document.getElementById("loginTab");
+      const signupTab = document.getElementById("signupTab");
+      const loginForm = document.getElementById("loginForm");
+      const signupForm = document.getElementById("signupForm");
+
+      loginTab.addEventListener("click", () => {
+        loginForm.style.display = "block";
+        signupForm.style.display = "none";
+        loginTab.classList.add("active");
+        signupTab.classList.remove("active");
+      });
+
+      signupTab.addEventListener("click", () => {
+        loginForm.style.display = "none";
+        signupForm.style.display = "block";
+        signupTab.classList.add("active");
+        loginTab.classList.remove("active");
+      });
+
+      const DEFAULT_ADMIN = { username: "admin", password: "admin1232026" };
+
+      let users = JSON.parse(localStorage.getItem("users")) || [DEFAULT_ADMIN];
+
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const username = document.getElementById("loginUsername").value;
+        const password = document.getElementById("loginPassword").value;
+        const loginErrorMsg = document.getElementById("loginErrorMsg");
+
+        const user = users.find(
+          (u) => u.username === username && u.password === password,
+        );
+        if (user) {
+          sessionStorage.setItem("isLoggedIn", "true");
+          sessionStorage.setItem("currentUser", username);
+          window.location.href = "index.html";
+        } else {
+          loginErrorMsg.textContent = "Invalid username or password";
+          loginErrorMsg.style.color = "red";
+        }
+      });
+
+      signupForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const username = document.getElementById("signupUsername").value;
+        const password = document.getElementById("signupPassword").value;
+        const confirmPassword = document.getElementById(
+          "signupConfirmPassword",
+        ).value;
+        const signupErrorMsg = document.getElementById("signupErrorMsg");
+
+        if (users.some((u) => u.username === username)) {
+          signupErrorMsg.textContent = "Username already exists";
+          signupErrorMsg.style.color = "red";
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          signupErrorMsg.textContent = "Passwords do not match";
+          signupErrorMsg.style.color = "red";
+          return;
+        }
+
+        users.push({ username, password });
+        localStorage.setItem("users", JSON.stringify(users));
+        signupErrorMsg.style.color = "green";
+        signupErrorMsg.textContent = "Sign up successful! You can now login.";
+
+        loginTab.click();
+      });
+    </script>
+  </body>
+</html>

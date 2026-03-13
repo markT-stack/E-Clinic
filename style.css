@@ -1,0 +1,195 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: url(background.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    color: black;
+}
+
+.logo{
+    cursor: pointer;
+}
+
+.dashboard{
+    display:flex;
+    height:100vh;
+}
+
+#dashboard{
+    margin-bottom:50px;
+}
+
+.cards{
+    display:flex;
+    gap:20px;
+    justify-content:center;
+    margin:20px 0;
+    flex-wrap:wrap;
+}
+
+.card{
+    background:rgba(255,255,255,0.6);
+    color: black;
+    padding:20px;
+    border-radius:10px;
+    width:200px;
+    text-align:center;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+.card h3{
+    font-size:16px;
+    margin-bottom:10px;
+}
+
+.card p{
+    font-size:28px;
+    font-weight:bold;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
+    margin-top:30px;
+}
+
+.chart-box{
+    background:rgba(255,255,255,0.6);
+    color: black;
+    padding:20px;
+    border-radius:10px;
+}
+
+.activity-box{
+    background:rgba(255,255,255,0.6);
+    color: black;
+    padding:20px;
+    border-radius:10px;
+}
+
+.sidebar {
+    width: 230px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 20px;
+}
+
+.sidebar img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.menu {
+    list-style: none;
+}
+
+.menu li {
+    margin: 15px 0;
+}
+
+.menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    display: block;
+    padding: 10px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.menu a:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px;
+    text-align: center;
+    overflow-y: auto;
+}
+
+h1 {
+    font-size: 38px;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 8px;
+    margin: 5px;
+    width: 150px;
+}
+
+button {
+    padding: 8px 15px;
+    margin: 5px;
+    cursor: pointer;
+    border: none;
+    background-color: #89a06f;
+    color: white;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #f1f2c9;
+    transform: scale(1.1);
+    color: black;
+}
+
+#appointments{
+    margin-top:40px;
+}
+
+.appointment-form{
+    margin-bottom:20px;
+}
+
+.appointment-form input, 
+.appointment-form select{
+    padding:8px;
+    margin:5px;
+    width:150px;
+}
+
+.table{
+    margin: 0 auto;
+    border-collapse: collapse;
+    width: 80%;
+    background-color: rgba(255, 255, 255, 0.466);
+}
+
+.table th, .table td{
+    border: 1px solid #0000005c;
+    padding: 10px;
+}
+
+.table th{
+    background-color: #755844;
+    color: white;
+}
+
+#contact{
+    margin-top: 900px;
+}
