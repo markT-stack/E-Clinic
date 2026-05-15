@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CTU E-Clinic</title>
+    <link rel="stylesheet" href="style.css?v=pro-dashboard-3" />
+</head>
+<body>
+    <div class="dashboard">
+      <aside class="sidebar">
+        <div class="logo" onclick="window.location.href = 'admin-dashboard.html'">
+          <img src="CTU Logo (Cebu Technological University).jpg" alt="CTU Logo" />
+          <h2>E-Clinic Admin</h2>
+        </div>
+
+        <ul class="menu">
+          <li><a href="#dashboard" data-nav="DB">Dashboard</a></li>
+          <li><a href="#students" data-nav="ST">Students Log</a></li>
+          <li><a href="#appointments" data-nav="AP">Appointments</a></li>
+          <li><a href="#queries" data-nav="QA">Student Queries</a></li>
+          <li class="logout-item"><a href="javascript:void(0)" id="logoutLink">Logout</a></li>
+        </ul>
+      </aside>
+
+      <main class="main-content">
+        <header class="page-hero" id="home">
+          <div>
+            <p class="eyebrow">Admin Panel</p>
+            <h1>CTU E-Clinic</h1>
+            <p class="page-subtitle">Monitor appointments, student records, and clinic queries from one organized workspace.</p>
+            <div class="hero-actions">
+              <a href="#appointments">Review Appointments</a>
+              <a href="#queries">Check Queries</a>
+            </div>
+          </div>
+          <div class="hero-panel">
+            <span class="hero-label">Clinic Operations</span>
+            <strong>Ready for review</strong>
+            <small>Use the dashboard to manage requests and keep student support moving.</small>
+          </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard">
+          <div class="section-header">
+            <div>
+              <span>Operations</span>
+              <h1>Dashboard</h1>
+            </div>
+            <p>Track clinic workload, pending requests, and recent student activity.</p>
+          </div>
+
+          <div class="cards">
+            <div class="card">
+              <h3>Total Appointments</h3>
+              <p id="totalAppointments">0</p>
+            </div>
+
+            <div class="card">
+              <h3>Total Students</h3>
+              <p id="totalStudents">0</p>
+            </div>
+
+            <div class="card">
+              <h3>Total Queries</h3>
+              <p id="totalQueries">0</p>
+            </div>
+
+            <div class="card">
+              <h3>Pending Requests</h3>
+              <p id="todayAppointments">0</p>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="chart-box">
+              <h3>Clinic Activity (Weekly)</h3>
+              <canvas id="activityChart"></canvas>
+              <p id="chartErrorMessage" style="color: #8a1f1f; display:none; margin-top: 0.5rem;"></p>
+            </div>
+
+            <div class="activity-box">
+              <h3>Recent Activity</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>Action</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody id="activityTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Students Log Section -->
+        <section id="students">
+          <div class="section-header">
+            <div>
+              <span>Records</span>
+              <h2>Students Log</h2>
+            </div>
+            <p>Add, update, and maintain student record entries.</p>
+          </div>
+
+          <div class="student-form">
+            <input type="text" id="name" placeholder="Student Name" />
+            <input type="text" id="idNumber" placeholder="Student ID" />
+            <input type="text" id="course" placeholder="Course" />
+            <input type="text" id="section" placeholder="Section" />
+            <button onclick="addStudent()">Add Student</button>
+            <button onclick="updateStudent()" style="display:none">Update Student</button>
+          </div>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>ID</th>
+                <th>Course</th>
+                <th>Section</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="studentTableBody"></tbody>
+          </table>
+        </section>
+
+        <!-- Appointments Section -->
+        <section id="appointments">
+          <div class="section-header">
+            <div>
+              <span>Scheduling</span>
+              <h1>Appointment Requests</h1>
+            </div>
+            <p>Review and manage student appointment requests below.</p>
+          </div>
+
+          <table class="table" id="appointmentTable">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Student ID</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Concern</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <!-- Student Queries Section -->
+        <section id="queries">
+          <div class="section-header">
+            <div>
+              <span>Response Center</span>
+              <h1>Student Queries & Requests</h1>
+            </div>
+            <p>Monitor student messages and respond to clinic-related concerns.</p>
+          </div>
+
+          <div class="queries-container">
+            <table class="table" id="queriesTable">
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Student ID</th>
+                  <th>Query Type</th>
+                  <th>Message</th>
+                  <th>Date Submitted</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="queriesTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script-enhanced.js?v=3"></script>
+</body>
+</html>

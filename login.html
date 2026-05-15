@@ -2,16 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>CTU E-Clinic</title>
+    <title>CTU E-Clinic - Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <link rel="stylesheet" href="login.css" />
   </head>
   <body>
-    <div class="login-container">
-      <div class="tab-buttons">
-        <button id="loginTab" class="active">Login</button>
-        <button id="signupTab">Sign Up</button>
-      </div>
+    <div class="login-wrapper">
+      <a class="back-home" onclick="window.location.href='landing.html'">← Back to Home</a>
+      <div class="login-container">
+        <div class="tab-buttons">
+          <button id="loginTab" class="active">Login</button>
+          <button id="signupTab">Sign Up</button>
+        </div>
 
       <form class="login-form" id="loginForm">
         <h2>CTU E-Clinic Login</h2>
@@ -40,6 +45,11 @@
         </div>
 
         <div class="input-group">
+          <label>Student ID</label>
+          <input type="text" id="signupStudentId" required />
+        </div>
+
+        <div class="input-group">
           <label>Password</label>
           <input type="password" id="signupPassword" required />
         </div>
@@ -52,6 +62,7 @@
         <button type="submit">Sign Up</button>
         <p id="signupErrorMsg"></p>
       </form>
+    </div>
     </div>
 
     <script>
@@ -74,40 +85,62 @@
         loginTab.classList.remove("active");
       });
 
-      const DEFAULT_ADMIN = { username: "admin", password: "admin1232026" };
-
-      let users = JSON.parse(localStorage.getItem("users")) || [DEFAULT_ADMIN];
-
-      loginForm.addEventListener("submit", (e) => {
+      loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const username = document.getElementById("loginUsername").value;
+        const username = document.getElementById("loginUsername").value.trim();
         const password = document.getElementById("loginPassword").value;
         const loginErrorMsg = document.getElementById("loginErrorMsg");
 
-        const user = users.find(
-          (u) => u.username === username && u.password === password,
-        );
-        if (user) {
-          sessionStorage.setItem("isLoggedIn", "true");
-          sessionStorage.setItem("currentUser", username);
-          window.location.href = "index.html";
-        } else {
-          loginErrorMsg.textContent = "Invalid username or password";
+        if (!username || !password) {
+          loginErrorMsg.textContent = "Please enter both username and password.";
+          loginErrorMsg.style.color = "red";
+          return;
+        }
+
+        try {
+          if (window.location.protocol === 'file:') {
+            throw new Error('Open this page through XAMPP: http://localhost/CTU-E-Clinic/login.html');
+          }
+
+          const loginUrl = new URL('api/login.php', window.location.href);
+          const response = await fetch(loginUrl.href, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+          const result = await response.json();
+          if (result.success) {
+            sessionStorage.setItem("isLoggedIn", "true");
+            sessionStorage.setItem("currentUser", username);
+            sessionStorage.setItem("role", result.role);
+            sessionStorage.setItem("studentId", result.student_id || '');
+            // Redirect based on user role
+            const redirectUrl = result.role === 'admin'
+              ? "admin-dashboard.html?fresh=pro-dashboard-3"
+              : "student-dashboard.html?fresh=pro-dashboard-3";
+            window.location.replace(redirectUrl);
+          } else {
+            loginErrorMsg.textContent = result.message || "Login failed";
+            loginErrorMsg.style.color = "red";
+          }
+        } catch (error) {
+          loginErrorMsg.textContent = error.message.includes('Failed to fetch')
+            ? "Cannot reach the login API. Open http://localhost/CTU-E-Clinic/login.html and make sure Apache/MySQL are running."
+            : "Error: " + error.message;
           loginErrorMsg.style.color = "red";
         }
       });
 
-      signupForm.addEventListener("submit", (e) => {
+      signupForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const username = document.getElementById("signupUsername").value;
+        const username = document.getElementById("signupUsername").value.trim();
+        const studentId = document.getElementById("signupStudentId").value.trim();
         const password = document.getElementById("signupPassword").value;
-        const confirmPassword = document.getElementById(
-          "signupConfirmPassword",
-        ).value;
+        const confirmPassword = document.getElementById("signupConfirmPassword").value;
         const signupErrorMsg = document.getElementById("signupErrorMsg");
 
-        if (users.some((u) => u.username === username)) {
-          signupErrorMsg.textContent = "Username already exists";
+        if (!username || !studentId || !password || !confirmPassword) {
+          signupErrorMsg.textContent = "Please fill out all fields.";
           signupErrorMsg.style.color = "red";
           return;
         }
@@ -118,12 +151,32 @@
           return;
         }
 
-        users.push({ username, password });
-        localStorage.setItem("users", JSON.stringify(users));
-        signupErrorMsg.style.color = "green";
-        signupErrorMsg.textContent = "Sign up successful! You can now login.";
+        try {
+          if (window.location.protocol === 'file:') {
+            throw new Error('Open this page through XAMPP: http://localhost/CTU-E-Clinic/login.html');
+          }
 
-        loginTab.click();
+          const signupUrl = new URL('api/signup.php', window.location.href);
+          const response = await fetch(signupUrl.href, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, studentId, password })
+          });
+          const result = await response.json();
+          if (result.success) {
+            signupErrorMsg.style.color = "green";
+            signupErrorMsg.textContent = "Sign up successful! You can now login.";
+            loginTab.click();
+          } else {
+            signupErrorMsg.textContent = result.message || "Signup failed";
+            signupErrorMsg.style.color = "red";
+          }
+        } catch (error) {
+          signupErrorMsg.textContent = error.message.includes('Failed to fetch')
+            ? "Cannot reach the signup API. Open http://localhost/CTU-E-Clinic/login.html and make sure Apache/MySQL are running."
+            : "Error: " + error.message;
+          signupErrorMsg.style.color = "red";
+        }
       });
     </script>
   </body>

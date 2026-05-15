@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="landing.css?v=professional-map-1" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <title>CTU E-Clinic</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="CTU Logo (Cebu Technological University).jpg" alt="CTU Logo">
+                <h2>CTU E-Clinic</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Services</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#location">Location</a></li>
+                <li><a href="javascript:void(0)" onclick="window.location.href='login.html?fresh=pro-dashboard-3'" class="login-link">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <p class="hero-kicker">Cebu Technological University</p>
+                <h1>CTU E-Clinic</h1>
+                <p class="subtitle">Student Clinic Appointment Scheduling and Queries Management System</p>
+                <p class="tagline">Where your health is our priority.</p>
+                <button class="get-started-btn" onclick="window.location.href='login.html?fresh=pro-dashboard-3'">Get Started</button>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <div class="section-heading">
+                <p>Student Services</p>
+                <h2>Why Choose CTU E-Clinic?</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3>Easy Scheduling</h3>
+                    <p>Book appointments with just a few clicks and manage your health easily.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>Query Support</h3>
+                    <p>Submit your health queries and get professional responses from clinic staff.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Track Records</h3>
+                    <p>Keep all your medical records and appointment history in one place.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure & Private</h3>
+                    <p>Your health data is protected with secure authentication and encryption.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <h2>About CTU E-Clinic</h2>
+            <p>CTU E-Clinic is a modern web-based platform designed specifically for Cebu Technological University students to manage their healthcare appointments and medical queries efficiently. Our system aims to reduce wait times, improve accessibility, and ensure quality healthcare services for all students.</p>
+        </section>
+
+        <!-- Location Section -->
+        <section id="location" class="location">
+            <div class="section-heading">
+                <p>Campus Location</p>
+                <h2>Find the CTU Daanbantayan Clinic</h2>
+            </div>
+
+            <div class="location-layout">
+                <div class="location-info">
+                    <span class="location-label">Clinic Pin</span>
+                    <h3>CTU Daanbantayan Campus</h3>
+                    <p>Use the interactive map to locate the campus clinic before your appointment. For urgent concerns, proceed directly to the clinic desk during service hours.</p>
+
+                    <div class="location-details">
+                        <div>
+                            <strong>Service Area</strong>
+                            <span>Student health assistance and appointment support</span>
+                        </div>
+                        <div>
+                            <strong>Map Focus</strong>
+                            <span>Daanbantayan, Cebu campus clinic marker</span>
+                        </div>
+                    </div>
+
+                    <a class="map-action" href="https://www.openstreetmap.org/?mlat=11.2678&mlon=124.0082#map=15/11.2678/124.0082" target="_blank" rel="noopener">Open Larger Map</a>
+                </div>
+
+                <div class="map-panel">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 CTU E-Clinic. All rights reserved.</p>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- YOUR MAP CODE HERE -->
+    <script>
+        var map = L.map('map').setView([11.2678, 124.0082], 15);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        L.marker([11.2678, 124.0082]).addTo(map)
+            .bindPopup('CTU Daanbantayan Campus - CLINIC')
+            .openPopup();
+    </script>
+</body>
+</html>

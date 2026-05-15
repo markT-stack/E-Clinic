@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - CTU E-Clinic</title>
+    <link rel="stylesheet" href="style.css?v=pro-dashboard-3" />
+</head>
+<body>
+    <div class="dashboard">
+      <aside class="sidebar">
+        <div class="logo" onclick="window.location.href = 'student-dashboard.html'">
+          <img src="CTU Logo (Cebu Technological University).jpg" alt="CTU Logo" />
+          <h2>E-Clinic</h2>
+        </div>
+
+        <ul class="menu">
+          <li><a href="#myinfo" data-nav="ID">My Information</a></li>
+          <li><a href="#appointments" data-nav="AP">My Appointments</a></li>
+          <li><a href="#queries" data-nav="QA">My Queries</a></li>
+          <li><a href="#profile" data-nav="PR">Edit Profile</a></li>
+          <li class="logout-item"><a href="javascript:void(0)" id="logoutLink">Logout</a></li>
+        </ul>
+      </aside>
+
+      <main class="main-content">
+        <header class="page-hero" id="home">
+          <div>
+            <p class="eyebrow">Student Portal</p>
+            <h1>CTU E-Clinic</h1>
+            <p class="page-subtitle">Manage your health profile, appointments, and clinic requests in one secure place.</p>
+            <div class="hero-actions">
+              <a href="#appointments">Request Appointment</a>
+              <a href="#queries">Submit Query</a>
+            </div>
+          </div>
+          <div class="hero-panel">
+            <span class="hero-label">Clinic Desk</span>
+            <strong>Open for requests</strong>
+            <small>Appointments are reviewed by clinic staff before confirmation.</small>
+          </div>
+        </header>
+
+        <div class="overview-grid" aria-label="Student dashboard overview">
+          <article class="overview-card">
+            <span class="overview-icon">ID</span>
+            <div>
+              <p>Profile</p>
+              <strong>Keep updated</strong>
+            </div>
+          </article>
+          <article class="overview-card">
+            <span class="overview-icon">AP</span>
+            <div>
+              <p>Appointments</p>
+              <strong>Request & track</strong>
+            </div>
+          </article>
+          <article class="overview-card">
+            <span class="overview-icon">QA</span>
+            <div>
+              <p>Queries</p>
+              <strong>Ask the clinic</strong>
+            </div>
+          </article>
+        </div>
+
+        <!-- My Information Section -->
+        <section id="myinfo">
+          <div class="section-header">
+            <div>
+              <span>Health Record</span>
+              <h1>My Information</h1>
+            </div>
+            <p>Keep your profile and medical background current for faster clinic assistance.</p>
+          </div>
+
+          <div class="student-info-form">
+            <h3>Personal Information</h3>
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="fullName" placeholder="Enter your full name" />
+            </div>
+
+            <div class="form-group">
+              <label>Student ID</label>
+              <input type="text" id="studentIdInput" placeholder="Your student ID" readonly />
+            </div>
+
+            <div class="form-group">
+              <label>Course</label>
+              <input type="text" id="course" placeholder="Your course" />
+            </div>
+
+            <div class="form-group">
+              <label>Section</label>
+              <input type="text" id="section" placeholder="Your section" />
+            </div>
+
+            <div class="form-group">
+              <label>Contact Number</label>
+              <input type="tel" id="contactNumber" placeholder="Your contact number" />
+            </div>
+
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="emailAddress" placeholder="Your email address" />
+            </div>
+
+            <h3 class="form-section-title">Medical History</h3>
+
+            <div class="form-group form-group-full">
+              <label>Allergies</label>
+              <textarea id="allergies" placeholder="List any allergies (if any)"></textarea>
+            </div>
+
+            <div class="form-group form-group-full">
+              <label>Current Medications</label>
+              <textarea id="medications" placeholder="List any current medications (if any)"></textarea>
+            </div>
+
+            <div class="form-group form-group-full">
+              <label>Medical Conditions</label>
+              <textarea id="medicalConditions" placeholder="List any chronic conditions or past medical history"></textarea>
+            </div>
+
+            <button class="primary-action" onclick="saveStudentInfo()">Save Information</button>
+          </div>
+        </section>
+
+        <!-- My Appointments Section -->
+        <section id="appointments">
+          <div class="section-header">
+            <div>
+              <span>Clinic Visit</span>
+              <h1>Request Appointment</h1>
+            </div>
+            <p>Choose a preferred schedule and describe your concern clearly.</p>
+          </div>
+
+          <div class="appointment-form">
+            <h3>Book an Appointment</h3>
+            <p>Your appointment request will be reviewed by the clinic staff before confirmation.</p>
+
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" id="appointmentDate" />
+            </div>
+
+            <div class="form-group">
+              <label>Time</label>
+              <input type="time" id="appointmentTime" />
+            </div>
+
+            <div class="form-group form-group-full">
+              <label>Concern/Reason for Visit</label>
+              <select id="concern">
+                <option value="">Select a concern</option>
+                <option value="Medical Checkup">Medical Checkup</option>
+                <option value="Consultation">General Consultation</option>
+                <option value="First Aid">First Aid</option>
+                <option value="Vaccination">Vaccination</option>
+                <option value="Laboratory Test">Laboratory Test</option>
+                <option value="Follow-up">Follow-up Visit</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group form-group-full">
+              <label>Additional Notes (Optional)</label>
+              <textarea id="appointmentNotes" placeholder="Additional details about your appointment..."></textarea>
+            </div>
+
+            <button class="primary-action" onclick="saveAppointment()">Request Appointment</button>
+          </div>
+
+          <h3 class="table-title">Your Appointment Requests</h3>
+
+          <table class="table" id="appointmentTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Concern</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <!-- My Queries Section -->
+        <section id="queries">
+          <div class="section-header">
+            <div>
+              <span>Support Desk</span>
+              <h1>Submit & Track Queries</h1>
+            </div>
+            <p>Send health questions or requests and monitor clinic responses.</p>
+          </div>
+
+          <div class="query-form">
+            <h3>Submit a Query</h3>
+
+            <div class="form-group form-group-full">
+              <label>Query Type</label>
+              <select id="queryType">
+                <option value="">Select query type</option>
+                <option value="General Health Question">General Health Question</option>
+                <option value="Appointment Request">Appointment Request</option>
+                <option value="Medical Concern">Medical Concern</option>
+                <option value="Prescription Renewal">Prescription Renewal</option>
+                <option value="Complaint">Complaint</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group form-group-full">
+              <label>Your Query</label>
+              <textarea id="queryMessage" placeholder="Please describe your query in detail..."></textarea>
+            </div>
+
+            <button class="primary-action" onclick="submitQuery()">Submit Query</button>
+          </div>
+
+          <h3 class="table-title">Your Query History</h3>
+
+          <table class="table" id="queriesTable">
+            <thead>
+              <tr>
+                <th>Date Submitted</th>
+                <th>Query Type</th>
+                <th>Message</th>
+                <th>Status</th>
+                <th>Response</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="queriesTableBody"></tbody>
+          </table>
+        </section>
+
+        <!-- Edit Profile Section -->
+        <section id="profile">
+          <div class="section-header">
+            <div>
+              <span>Security</span>
+              <h1>Edit Profile</h1>
+            </div>
+            <p>Manage account details and update your password when needed.</p>
+          </div>
+
+          <div class="profile-form">
+            <h3>Account Settings</h3>
+
+            <div class="form-group">
+              <label>Username</label>
+              <input type="text" id="username" placeholder="Your username" readonly />
+            </div>
+
+            <div class="form-group">
+              <label>Change Password</label>
+              <input type="password" id="currentPassword" placeholder="Current password" />
+            </div>
+
+            <div class="form-group">
+              <label>New Password</label>
+              <input type="password" id="newPassword" placeholder="New password" />
+            </div>
+
+            <div class="form-group">
+              <label>Confirm New Password</label>
+              <input type="password" id="confirmPassword" placeholder="Confirm new password" />
+            </div>
+
+            <button class="primary-action" onclick="updatePassword()">Update Password</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script-enhanced.js?v=3"></script>
+</body>
+</html>
