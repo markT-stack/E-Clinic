@@ -1,22 +1,27 @@
 <?php
-// ============================================================
-// Session security settings — must be set BEFORE session_start()
-// These apply to every file that requires this config.
-// ============================================================
-ini_set('session.cookie_secure',   '1');  // HTTPS only (Railway is always HTTPS)
-ini_set('session.cookie_httponly', '1');  // Block JS from reading the session cookie
-ini_set('session.cookie_samesite', 'Lax'); // Allows normal navigation, blocks CSRF
+ini_set('session.cookie_secure',   '1');
+ini_set('session.cookie_httponly', '1');
+ini_set('session.cookie_samesite', 'Lax');
 
-// ============================================================
-// Database — reads Railway's auto-injected environment variables.
-// In Railway: add a MySQL plugin and these vars are set automatically.
-// Fallbacks are for local dev (copy .env.example and fill in values).
-// ============================================================
-$host = getenv('MYSQLHOST')     ?: getenv('DB_HOST') ?: 'mysql.railway.internal';
-$port = getenv('MYSQLPORT')     ?: getenv('DB_PORT') ?: '3306';
-$db   = getenv('MYSQLDATABASE') ?: getenv('DB_NAME') ?: 'railway';
-$user = getenv('MYSQLUSER')     ?: getenv('DB_USER') ?: 'root';
-$pass = getenv('MYSQLPASSWORD') ?: getenv('DB_PASS') ?: 'TwoDpQJvFSAaZmwclOFnRuHmDRPdoDzC';
+// Railway provides MYSQL_URL in the format:
+// mysql://user:password@host:port/database
+$url = getenv('MYSQL_URL') ?: getenv('MYSQL_PUBLIC_URL') ?: null;
+
+if ($url) {
+    $parts = parse_url($url);
+    $host  = $parts['host'];
+    $port  = $parts['port'] ?? 3306;
+    $user  = $parts['user'];
+    $pass  = $parts['pass'];
+    $db    = ltrim($parts['path'], '/');
+} else {
+    // Local fallback
+    $host = getenv('MYSQLHOST')     ?: 'localhost';
+    $port = getenv('MYSQLPORT')     ?: '3306';
+    $db   = getenv('MYSQLDATABASE') ?: 'eclinic';
+    $user = getenv('MYSQLUSER')     ?: 'root';
+    $pass = getenv('MYSQLPASSWORD') ?: '';
+}
 
 try {
     $pdo = new PDO(
@@ -24,12 +29,12 @@ try {
         $user,
         $pass
     );
-    $pdo->setAttribute(PDO::ATTR_ERRMODE,        PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE,            PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     error_log("DB Connection failed: " . $e->getMessage());
     header('Content-Type: application/json');
     http_response_code(500);
-    die(json_encode(['error' => 'Database connection failed']));
+    die(json_encode(['error' => 'Database connection failed', 'detail' => $e->getMessage()]));
 }
 ?>
