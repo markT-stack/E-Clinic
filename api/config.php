@@ -12,11 +12,11 @@ ini_set('session.cookie_samesite', 'Lax'); // Allows normal navigation, blocks C
 // In Railway: add a MySQL plugin and these vars are set automatically.
 // Fallbacks are for local dev (copy .env.example and fill in values).
 // ============================================================
-$host = getenv('MYSQLHOST')     ?: getenv('DB_HOST') ?: 'localhost';
+$host = getenv('MYSQLHOST')     ?: getenv('DB_HOST') ?: 'mysql.railway.internal';
 $port = getenv('MYSQLPORT')     ?: getenv('DB_PORT') ?: '3306';
-$db   = getenv('MYSQLDATABASE') ?: getenv('DB_NAME') ?: 'eclinic';
+$db   = getenv('MYSQLDATABASE') ?: getenv('DB_NAME') ?: 'railway';
 $user = getenv('MYSQLUSER')     ?: getenv('DB_USER') ?: 'root';
-$pass = getenv('MYSQLPASSWORD') ?: getenv('DB_PASS') ?: '';
+$pass = getenv('MYSQLPASSWORD') ?: getenv('DB_PASS') ?: 'TwoDpQJvFSAaZmwclOFnRuHmDRPdoDzC';
 
 try {
     $pdo = new PDO(
