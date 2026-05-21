@@ -18,7 +18,7 @@ if ($url) {
     // Local fallback
     $host = getenv('MYSQLHOST')     ?: 'localhost';
     $port = getenv('MYSQLPORT')     ?: '3306';
-    $db   = getenv('MYSQLDATABASE') ?: 'eclinic';
+    $db   = getenv('MYSQLDATABASE') ?: 'railway';
     $user = getenv('MYSQLUSER')     ?: 'root';
     $pass = getenv('MYSQLPASSWORD') ?: '';
 }
