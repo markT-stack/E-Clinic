@@ -1,3 +1,13 @@
 {
-    "providers": ["php"]
+    "providers": ["php"],
+    "install": {
+        "phpExtensions": [
+            "pdo",
+            "pdo_mysql",
+            "mysqli",
+            "mbstring",
+            "session",
+            "json"
+        ]
+    }
 }
