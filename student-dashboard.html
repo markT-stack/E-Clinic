@@ -252,6 +252,38 @@
       </main>
     </div>
 
+    <div class="chatbot-widget" aria-live="polite">
+      <div class="chatbot-panel" id="chatbotPanel">
+        <div class="chatbot-header">
+          <div>
+            <strong>CTU Clinic Assistant</strong>
+            <small>Online now</small>
+          </div>
+          <button type="button" class="chatbot-close" id="chatbotClose" aria-label="Close chatbot">×</button>
+        </div>
+
+        <div class="chatbot-suggestions" aria-label="Suggested questions">
+          <button type="button" class="suggestion-pill" data-prompt="How do I book an appointment?">Book appointment</button>
+          <button type="button" class="suggestion-pill" data-prompt="What are the clinic hours?">Clinic hours</button>
+          <button type="button" class="suggestion-pill" data-prompt="How do I submit a query?">Submit query</button>
+          <button type="button" class="suggestion-pill" data-prompt="Where is the clinic located?">Clinic location</button>
+        </div>
+
+        <div class="chatbot-messages" id="chatbotMessages">
+          <div class="chatbot-bubble bot">Hi! I can help with appointment, clinic, and student support questions.</div>
+        </div>
+
+        <form class="chatbot-form" id="chatbotForm">
+          <input id="chatbotInput" type="text" placeholder="Ask about appointments, queries, or clinic support..." aria-label="Type your question" />
+          <button type="submit">Send</button>
+        </form>
+      </div>
+
+      <button type="button" class="chatbot-toggle" id="chatbotToggle" aria-label="Open chatbot">
+        💬
+      </button>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script-enhanced.js?v=3"></script>
 </body>

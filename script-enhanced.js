@@ -808,3 +808,122 @@ window.submitQuery             = submitQuery;
 window.updatePassword          = updatePassword;
 window.resolveQuery            = resolveQuery;
 window.deleteQueryEntry        = deleteQueryEntry;
+
+// ============================================================================
+// STUDENT CHATBOT
+// ============================================================================
+
+const clinicChatHistory = [];
+
+function normalizeChatMessage(message) {
+    return String(message || '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+async function getClinicChatReply(message) {
+    const input = normalizeChatMessage(message);
+
+    if (!input) {
+        return 'Please type your question so I can help you.';
+    }
+
+    try {
+        const response = await fetch('api/chatbot.php', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                question: input,
+                history: clinicChatHistory.slice(-8)
+            })
+        });
+
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok || !data || !data.reply) {
+            throw new Error(data && data.error ? data.error : 'AI service is unavailable');
+        }
+
+        clinicChatHistory.push({ role: 'user', content: input });
+        clinicChatHistory.push({ role: 'assistant', content: data.reply });
+
+        return data.reply;
+    } catch (error) {
+        return error && error.message
+            ? error.message
+            : 'The assistant is temporarily unavailable. Please try again or contact the clinic desk.';
+    }
+}
+
+function appendChatMessage(role, text) {
+    const messages = document.getElementById('chatbotMessages');
+    if (!messages) return;
+
+    const bubble = document.createElement('div');
+    bubble.className = `chatbot-bubble ${role}`;
+    bubble.textContent = text;
+    messages.appendChild(bubble);
+    messages.scrollTop = messages.scrollHeight;
+}
+
+let chatbotBusy = false;
+
+async function sendChatbotMessage(message) {
+    const input = document.getElementById('chatbotInput');
+    const text = String(message || '').trim();
+    if (!text || chatbotBusy) return;
+
+    chatbotBusy = true;
+    appendChatMessage('user', text);
+    if (input) input.value = '';
+
+    // Typing indicator while waiting for the AI
+    appendChatMessage('bot', 'Typing...');
+    const messages = document.getElementById('chatbotMessages');
+    const typingBubble = messages ? messages.lastElementChild : null;
+
+    try {
+        const reply = await getClinicChatReply(text);
+        if (typingBubble) typingBubble.textContent = reply;
+    } finally {
+        chatbotBusy = false;
+        if (messages) messages.scrollTop = messages.scrollHeight;
+    }
+}
+
+function initChatbot() {
+    const toggle = document.getElementById('chatbotToggle');
+    const closeBtn  = document.getElementById('chatbotClose');
+    const panel = document.getElementById('chatbotPanel');
+    const form = document.getElementById('chatbotForm');
+    const input = document.getElementById('chatbotInput');
+    const suggestions = document.querySelectorAll('.suggestion-pill');
+
+    if (!toggle || !panel || !form) return;
+
+    toggle.addEventListener('click', () => {
+        const isOpen = panel.classList.contains('open');
+        panel.classList.toggle('open', !isOpen);
+    });
+
+    closeBtn?.addEventListener('click', () => panel.classList.remove('open'));
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        sendChatbotMessage(input?.value || '');
+    });
+
+    suggestions.forEach((button) => {
+        button.addEventListener('click', () => {
+            sendChatbotMessage(button.dataset.prompt || button.textContent);
+            panel.classList.add('open');
+        });
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initChatbot);
+} else {
+    initChatbot();
+}

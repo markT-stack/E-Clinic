@@ -95,7 +95,7 @@
 
 ### 6. ✅ Documentation
 
-#### DEPLOYMENT_GUIDE.md
+#### XAMPP_SETUP.md
 - Complete setup instructions
 - Database creation with SQL commands
 - Admin account creation
@@ -103,7 +103,7 @@
 - Feature descriptions
 - Troubleshooting guide
 - Security recommendations
-- Deployment checklist
+- Local XAMPP verification checklist
 
 #### README.md
 - Quick start guide
@@ -219,26 +219,25 @@ The website is fully responsive:
 - **Role-based routing** with proper authentication
 - **Professional UI components**: cards, badges, notifications, modals
 
-## ✨ Ready for Deployment
+## ✨ Ready for Local XAMPP Use
 
 The website is now:
 ✅ Professionally designed  
 ✅ Fully functional with role-based access  
 ✅ Mobile responsive  
 ✅ Well documented  
-✅ Production-ready  
+✅ Configured for XAMPP and local MySQL
 ✅ Thoroughly tested for UX  
 
-### Next Steps for School:
-1. Set up hosting/server
-2. Create database
-3. Add admin account
-4. Customize with school colors if needed
-5. Deploy and train staff/students
-6. Monitor usage and gather feedback
+### Next Steps for School
+1. Start Apache and MySQL in XAMPP
+2. Import `create_tables.sql` through phpMyAdmin
+3. Open the site through `http://localhost/`
+4. Change the seeded admin password
+5. Create student accounts using registered student IDs
 
 ---
 
 **Version**: 1.0.0 Professional Release  
 **Last Updated**: May 2026  
-**Status**: ✅ Ready for Production Deployment
+**Status**: ✅ Ready for local XAMPP use

@@ -1,4 +1,4 @@
-# CTU E-Clinic Website - Deployment & Setup Guide
+# CTU E-Clinic - XAMPP Setup Guide
 
 ## Overview
 This is a professional E-Clinic website system for Cebu Technological University, featuring role-based dashboards for both administrators and students.
@@ -35,111 +35,36 @@ CTU-E-Clinic/
     ├── signup.php           # User signup API endpoint
     ├── students.php         # Student management API
     ├── appointments.php     # Appointment management API
-    └── test.php             # API testing endpoint
+    ├── queries.php          # Student query management API
+    └── student_profile.php  # Student profile API
 ```
 
 ## Database Setup
 
-### Create Database and Tables
+### XAMPP local setup
 
-1. Open phpMyAdmin or MySQL command line
-2. Run the SQL commands in `create_tables.sql`:
+1. Copy the project into XAMPP's `htdocs` directory.
+2. Start **Apache** and **MySQL** in the XAMPP Control Panel.
+3. In phpMyAdmin (`http://localhost/phpmyadmin`), import the repository's `create_tables.sql`. It creates the `eclinic` database, tables, and a database-backed admin account.
+4. Open `http://localhost/<project-folder>/login.html` through Apache. Do not use `file://` or Live Server when signing in with real accounts.
 
-```sql
--- Users table (stores login credentials)
-CREATE TABLE users (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(100) UNIQUE NOT NULL,
-    email VARCHAR(100),
-    password VARCHAR(255) NOT NULL,
-    role ENUM('admin', 'student') DEFAULT 'student',
-    student_id VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Students table (student profile information)
-CREATE TABLE students (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT,
-    name VARCHAR(100) NOT NULL,
-    student_id VARCHAR(50) UNIQUE NOT NULL,
-    course VARCHAR(100),
-    section VARCHAR(50),
-    email VARCHAR(100),
-    contact VARCHAR(20),
-    allergies TEXT,
-    medications TEXT,
-    medical_conditions TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
--- Appointments table
-CREATE TABLE appointments (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    student_id VARCHAR(50) NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    date DATE NOT NULL,
-    time TIME NOT NULL,
-    concern VARCHAR(255) NOT NULL,
-    notes TEXT,
-    status ENUM('pending', 'confirmed', 'completed', 'cancelled') DEFAULT 'pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
--- Queries/Requests table
-CREATE TABLE queries (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    student_id VARCHAR(50) NOT NULL,
-    student_name VARCHAR(100),
-    query_type VARCHAR(100),
-    message TEXT NOT NULL,
-    response TEXT,
-    status ENUM('new', 'read', 'responded') DEFAULT 'new',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-```
-
-### Create Admin Account
-
-1. Access the signup page or run this SQL directly:
-
-```sql
--- Insert admin user
-INSERT INTO users (username, email, password, role, student_id) 
-VALUES ('admin', 'admin@ctu.edu.ph', '$2y$10$WDpAr.QVwNfwxsNPnXHVqOqRnJGsX4dFzDXvpLYVH7x6c0OQ0c2c6', 'admin', 'ADMIN001');
-```
-
-**Default Admin Credentials:**
-- Username: `admin`
-- Password: `admin123`
-
-⚠️ **Important**: Change the default password immediately after login!
+The seeded admin credentials are username `admin` and password `admin1232026`. Student accounts are created through **Sign Up**, using a student ID already present in the database's `students` table. The signup endpoint stores a password hash in MySQL; the login endpoint verifies it and starts the PHP session used by protected APIs, including the clinic assistant.
 
 ## Configuration
 
 ### Database Configuration (api/config.php)
 
-Update the database connection settings:
+`api/config.php` uses these XAMPP defaults:
 
-```php
-<?php
-$host = 'localhost';      // Your database host
-$db = 'eclinic';          // Your database name
-$user = 'root';           // Your database user
-$pass = '';               // Your database password
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
-}
-?>
+```text
+Host: localhost
+Port: 3306
+Database: eclinic
+Username: root
+Password: (empty by default in XAMPP)
 ```
+
+If you have set a MySQL password or changed the port, update the corresponding values in `api/config.php`. Keep AI provider keys in the local, git-ignored `api/secret.php` file; never add keys to frontend files or commit them.
 
 ## Features
 
@@ -225,30 +150,22 @@ try {
 - `PUT /api/appointments.php` - Update appointment
 - `DELETE /api/appointments.php?id=X` - Delete appointment
 
-## Deployment Checklist
+## Local verification
 
-- [ ] Database created and configured
-- [ ] Admin account created
-- [ ] `api/config.php` updated with correct database credentials
-- [ ] All files uploaded to server
-- [ ] Test admin login
-- [ ] Test student signup
-- [ ] Test appointment scheduling
-- [ ] Verify email notifications (if configured)
-- [ ] Check responsive design on mobile devices
-- [ ] Test all CRUD operations
+- [ ] Database imported in phpMyAdmin
+- [ ] Apache and MySQL are running in XAMPP
+- [ ] Site opened from `http://localhost/<project-folder>/login.html`
+- [ ] Admin login and student signup tested
+- [ ] Appointment and query workflows tested
 
 ## Security Notes
 
 ⚠️ **Important Security Recommendations:**
 
-1. **Change Default Admin Password** - Do this immediately
-2. **Use HTTPS** - Always use SSL/TLS in production
-3. **Database** - Use strong database passwords
-4. **Session Management** - Enable session timeout
-5. **Input Validation** - All inputs are validated on client and server
-6. **Password Hashing** - Passwords are hashed using bcrypt
-7. **CORS Policy** - Configure appropriate CORS headers for APIs
+1. **Change Default Admin Password** - Change it after the first login
+2. **Database** - Set a MySQL password if the local machine is shared
+3. **Input Validation** - Validate inputs on the server as well as the client
+4. **Password Hashing** - Passwords are hashed using PHP's password hashing functions
 
 ## Troubleshooting
 

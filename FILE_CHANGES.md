@@ -28,7 +28,7 @@
    - Activity tracking
 
 ### 4. **Documentation Files** 📚
-   - **DEPLOYMENT_GUIDE.md** - Complete setup instructions
+   - **XAMPP_SETUP.md** - Local setup instructions
    - **README.md** - Quick start guide
    - **IMPLEMENTATION_SUMMARY.md** - Feature overview
 
@@ -79,7 +79,7 @@ CTU-E-Clinic/
 │
 ├── 📋 create_tables.sql             (Database schema)
 │
-├── 📚 DEPLOYMENT_GUIDE.md           (New - setup instructions)
+├── 📚 XAMPP_SETUP.md                (Local setup instructions)
 ├── 📚 README.md                     (New - quick reference)
 ├── 📚 IMPLEMENTATION_SUMMARY.md     (New - feature overview)
 │
@@ -90,7 +90,6 @@ CTU-E-Clinic/
     ├── signup.php                   (Existing - user registration)
     ├── students.php                 (Existing - CRUD operations)
     ├── appointments.php             (Existing - appointment management)
-    └── test.php                     (Existing - API testing)
 ```
 
 ## Key Improvements Summary
@@ -135,7 +134,7 @@ CTU-E-Clinic/
 
 ## Testing Recommendations
 
-Before deployment, test:
+Before using the local XAMPP system, test:
 - [ ] Login with admin account
 - [ ] Login with student account
 - [ ] Create student (admin)
@@ -151,4 +150,4 @@ Before deployment, test:
 ---
 
 **All changes are production-ready and professionally designed!**
-🎉 Your E-Clinic website is ready for deployment!
+🎉 Your E-Clinic website is ready to run locally with XAMPP.

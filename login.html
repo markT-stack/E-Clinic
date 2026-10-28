@@ -126,18 +126,22 @@
           return;
         }
 
-        try {
-          if (window.location.protocol === 'file:') {
-            throw new Error('Open this page through XAMPP: http://localhost/CTU-E-Clinic/login.html');
-          }
+        if (window.location.protocol === 'file:') {
+          loginErrorMsg.textContent = "You're opening this page as a local file. Open http://localhost/CTU-DB%20E-Clinic/login.html to use XAMPP accounts.";
+          loginErrorMsg.style.color = "red";
+          return;
+        }
 
+        try {
           const loginUrl = new URL('api/login.php', window.location.href);
           const response = await fetch(loginUrl.href, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
           });
-          const result = await response.json();
+          const result = await response.json().catch(() => {
+            throw new Error('The login API did not return JSON. Start Apache and MySQL in XAMPP, then open this page through http://localhost.');
+          });
           if (result.success) {
             sessionStorage.setItem("isLoggedIn", "true");
             sessionStorage.setItem("currentUser", username);
@@ -149,12 +153,12 @@
               : "student-dashboard.html?fresh=pro-dashboard-3";
             window.location.replace(redirectUrl);
           } else {
-            loginErrorMsg.textContent = result.message || "Login failed";
+            loginErrorMsg.textContent = result.message || result.error || "Login failed";
             loginErrorMsg.style.color = "red";
           }
         } catch (error) {
           loginErrorMsg.textContent = error.message.includes('Failed to fetch')
-            ? "Cannot reach the login API. Open http://localhost/CTU-E-Clinic/login.html and make sure Apache/MySQL are running."
+            ? "Cannot reach the login API. Start Apache and MySQL in XAMPP and open the site through http://localhost."
             : "Error: " + error.message;
           loginErrorMsg.style.color = "red";
         }
@@ -180,29 +184,33 @@
           return;
         }
 
-        try {
-          if (window.location.protocol === 'file:') {
-            throw new Error('Open this page through XAMPP: http://localhost/CTU-E-Clinic/login.html');
-          }
+        if (window.location.protocol === 'file:') {
+          signupErrorMsg.textContent = "You're opening this page as a local file. Open http://localhost/CTU-DB%20E-Clinic/login.html to create a XAMPP account.";
+          signupErrorMsg.style.color = "red";
+          return;
+        }
 
+        try {
           const signupUrl = new URL('api/signup.php', window.location.href);
           const response = await fetch(signupUrl.href, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, studentId, password })
           });
-          const result = await response.json();
+          const result = await response.json().catch(() => {
+            throw new Error('The signup API did not return JSON. Start Apache and MySQL in XAMPP, then open this page through http://localhost.');
+          });
           if (result.success) {
             signupErrorMsg.style.color = "green";
             signupErrorMsg.textContent = "Sign up successful! You can now login.";
             loginTab.click();
           } else {
-            signupErrorMsg.textContent = result.message || "Signup failed";
+            signupErrorMsg.textContent = result.message || result.error || "Signup failed";
             signupErrorMsg.style.color = "red";
           }
         } catch (error) {
           signupErrorMsg.textContent = error.message.includes('Failed to fetch')
-            ? "Cannot reach the signup API. Open http://localhost/CTU-E-Clinic/login.html and make sure Apache/MySQL are running."
+            ? "Cannot reach the signup API. Start Apache and MySQL in XAMPP and open the site through http://localhost."
             : "Error: " + error.message;
           signupErrorMsg.style.color = "red";
         }
